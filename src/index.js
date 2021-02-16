@@ -50,7 +50,6 @@ class Node {
   }
 }
 
-
 class Tree {
   constructor(name){
     this.name = name;
@@ -86,64 +85,6 @@ class Tree {
 
     parent.appendChild(node);
     node.setParent(parent);
-  }
-
-
-  findHelper(node, treeNode) {
-      if(treeNode.isLeaf()){
-        return treeNode === node ? treeNode : null
-      }
-      return treeNode.children.find((n) => n === node);
-  }
-
-
-
-  findRecursive(node, treeNode, match=false) {
-      if(node === treeNode) {
-        console.log('oups');
-        // return treeNode
-      }
-
-      if(!treeNode.isLeaf()){
-        for(let child of treeNode.children) {
-          console.log('&&&&&&&&&&', child)
-          return this.findRecursive(node, child)
-        }
-      } else {
-        
-      }
-      
-      return false; 
-  }
-
-  dfsRecurse = function*(node, treeNode){
-    console.log(('&&&&&&&&&&&&&&&&&&&&&&'))
-    let found = false; 
-    if (node.isSame(treeNode)) {
-      return treeNode;
-    }
-
-    if(!treeNode.isLeaf()) {
-      const search = treeNode.children.find((n) => node === n);
-
-      if( search ) {
-        return search
-      }
-
-      const stack = Object.keys(treeNode.children);
-      while(stack.length && !found) {
-      const next = treeNode.children[stack.shift()];
-       found = yield* this.dfsRecurse(node, next)
-      }
-
-      if(found) {
-        console.log('""""""""""""""""""""""""')
-        return found;
-      }
-    }
-
-
-    return found;
   }
 
   // start stree from Node(tree) children
