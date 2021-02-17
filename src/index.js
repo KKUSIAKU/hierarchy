@@ -19,7 +19,9 @@ class Node {
     if( this.contains(node)) {
       throw new TypeError('Node already contains the child node')
     }
+    node.setParent(this)
     this.children.push(node);
+    // node.setParent(this);
   }
 
   setParent(ancestor) {
@@ -31,10 +33,7 @@ class Node {
     this.parent = ancestor;
   }
 
-  isSame(node){
-    return this === node; 
-  }
-
+  // big up garbage collector
   removeChild(node) { 
     const index = this.children.findIndex((child) => child === node);
     // 
@@ -42,10 +41,8 @@ class Node {
       const leftChildren = this.children.slice(0, index);
       const rightChildren =  this.children.slice(index + 1);
       this.children = leftChildren.concat(rightChildren);
+      node.parent = null;
       return true;
-    } else {
-      // trow exception ? 
-      return false; 
     }
   }
 }
@@ -84,7 +81,7 @@ class Tree {
     }
 
     parent.appendChild(node);
-    node.setParent(parent);
+    // node.setParent(parent);
   }
 
   // start stree from Node(tree) children
@@ -106,7 +103,14 @@ class Tree {
     return target;
   }
 
-  
+  delete(node) {
+    const targetNode = this.dfs(node, this.root)
+    if(targetNode) {
+      targetNode.parent.removeChild(targetNode)
+    }
+    return true;
+  }
+
   // isSame method
   find(node) {
     if(node === this.root) {

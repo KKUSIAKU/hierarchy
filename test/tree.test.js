@@ -93,6 +93,25 @@ describe('', () => {
     done()
   })
 
+  it('Should support find root', (done) => {
+    const r1 = new Node('r1');
+    const r1_n1 = new Node('r1_n1')
+    const r1_n2 = new Node('r1_n2')
+    const r1_n3 = new Node('r1_n3')
+    const r1_n11 = new Node('r1_n11')
+    const r1_n12 = new Node('r1_n12')
+    r1_n1.appendChild(r1_n11);
+    r1_n1.appendChild(r1_n12);
+    r1.appendChild(r1_n1)
+    r1.appendChild(r1_n2);
+    r1.appendChild(r1_n3);
+
+    const t = new Tree();
+    t.setRoot(r1)
+    expect(t.find(r1)).to.deep.equal(t.root)
+    done()
+  })
+
   it('Should find node leaf node', (done) => {
     const r1 = new Node('r1');
     const r1_n1 = new Node('r1_n1')
@@ -111,4 +130,49 @@ describe('', () => {
     expect(t.find(r1_n11)).to.deep.equal(r1_n11)
     done()
   })
+
+  it('Should remove node leaf node', (done) => {
+    const r1 = new Node('r1');
+    const r1_n1 = new Node('r1_n1')
+    const r1_n2 = new Node('r1_n2')
+    const r1_n3 = new Node('r1_n3')
+    const r1_n11 = new Node('r1_n11')
+    const r1_n12 = new Node('r1_n12')
+    r1_n1.appendChild(r1_n11);
+    r1_n1.appendChild(r1_n12);
+    r1.appendChild(r1_n1)
+    r1.appendChild(r1_n2);
+    r1.appendChild(r1_n3);
+    const t = new Tree();
+    t.setRoot(r1)
+    expect(t.find(r1_n11)).to.deep.equal(r1_n11)
+    t.delete(r1_n11)
+    expect(t.find(r1_n11)).to.equal(null)
+    expect(r1_n11.parent).to.equal(null);
+    done()
+  })
+
+  it('Should remove silently absent  node node', (done) => {
+    const r1 = new Node('r1');
+    const r1_n1 = new Node('r1_n1')
+    const r1_n2 = new Node('r1_n2')
+    const r1_n3 = new Node('r1_n3')
+    const r1_n11 = new Node('r1_n11')
+    const r1_n12 = new Node('r1_n12')
+    // this nod not inserted in the tree
+    const r1_n13 = new Node('r1_n12')
+    r1_n1.appendChild(r1_n11);
+    r1_n1.appendChild(r1_n12);
+    r1.appendChild(r1_n1)
+    r1.appendChild(r1_n2);
+    r1.appendChild(r1_n3);
+    const t = new Tree();
+    t.setRoot(r1)
+    expect(t.find(r1_n13)).to.equal(null)
+    expect(() => {
+      t.delete(r1_n13)
+    }).to.not.throw()
+    done()
+  })
+
 })
